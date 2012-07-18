@@ -1,0 +1,8 @@
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\BL\bin\Debug\BL.dll
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\BL\bin\Debug\BL.pdb
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\BL\bin\Debug\Neo4jClient.dll
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\BL\bin\Debug\RestSharp.dll
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\BL\bin\Debug\Neo4jClient.pdb
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\BL\obj\Debug\BL.dll
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\BL\obj\Debug\BL.pdb
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\BL\obj\Debug\BL.csprojResolveAssemblyReference.cache

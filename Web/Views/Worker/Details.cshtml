@@ -1,0 +1,23 @@
+﻿@model Web.Models.WorkerModel
+
+@{
+    ViewBag.Title = "WorkerDetails";
+}
+
+<h2>WorkerDetails</h2>
+
+<fieldset>
+    <legend>WorkerModel</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Back to List", "Index") |
+    @Html.ActionLink( "Delete", "Delete", new {id = Model.ID } )
+</p>

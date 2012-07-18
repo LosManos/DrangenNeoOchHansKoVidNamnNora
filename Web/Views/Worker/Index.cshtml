@@ -1,0 +1,15 @@
+﻿@model Web.Models.WorkersModel
+
+@{
+    ViewBag.Title = "Workers";
+}
+
+<h2>Workers</h2>
+
+    <ol>
+    @foreach( var worker in Model.WorkerList.OrderBy( w => w.Name ) ){
+        <li>
+            @Html.ActionLink(worker.Name, "Details", "Worker", new { ID = worker.ID }, null)
+        </li>
+    }
+    </ol>

@@ -1,0 +1,12 @@
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\TheConsole.exe.config
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\TheConsole.exe
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\TheConsole.pdb
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\BL.dll
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\Neo4jClient.dll
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\RestSharp.dll
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\Newtonsoft.Json.dll
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\BL.pdb
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\bin\Debug\Neo4jClient.pdb
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\obj\Debug\TheConsole.csprojResolveAssemblyReference.cache
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\obj\Debug\TheConsole.exe
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Console\obj\Debug\TheConsole.pdb
