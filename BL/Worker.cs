@@ -14,7 +14,7 @@ namespace BL
         {
             Connect();
             
-            var worker = AddWorker(name, Client, GetWorkersRootNode());
+            var worker = AddWorker(name, Client, GetWorkersRootNode(Client, RootNode));
             return DTO.Worker.Create(worker.Data);
         }
 

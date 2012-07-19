@@ -42,7 +42,7 @@ namespace Web.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            throw new NotImplementedException();
         }
 
         //
@@ -66,12 +66,26 @@ namespace Web.Controllers
         //
         // GET: /Worker/Edit/5
 
-        public ActionResult Edit(int id)
+        //public ActionResult Edit()
+        //{
+        //    var model = Models.WorkerModel.Create(0, "");
+        //    return View(model);
+        //}
+
+        public ActionResult Edit(int? id)
         {
             var bl = new BL.Worker();
-            var worker = bl.Get(id);
-            var model = Models.WorkerModel.Create(worker.ID, worker.Name);
-            return View(model);
+            if (id.HasValue)
+            {
+                var worker = bl.Get(id.Value);
+                var model = Models.WorkerModel.Create(worker.ID, worker.Name);
+                return View(model);
+            }
+            else
+            {
+                var model = Models.WorkerModel.Create(0, string.Empty);
+                return View(model);
+            }
         }
 
         //
@@ -81,14 +95,21 @@ namespace Web.Controllers
         public ActionResult Edit(Models.WorkerModel model)
         {
             var bl = new BL.Worker();
-            
-            var worker = bl.Get(model.ID);
-            worker.Set(model.Name);
-            bl.Update(worker);
 
-            model.Set(worker);
-
-            return View("Details", model);
+            if (model.ID == 0)
+            {
+                var worker = bl.AddWorker(model.Name);
+                model.Set(worker);
+                return View("Details", model);
+            }
+            else
+            {
+                var worker = bl.Get(model.ID);
+                worker.Set(model.Name);
+                bl.Update(worker);
+                model.Set(worker);
+                return View("Details", model);
+            }
         }
 
         //

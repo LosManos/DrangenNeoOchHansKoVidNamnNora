@@ -23,7 +23,7 @@ namespace BL
         {
             get
             {
-                _rootNode = _rootNode ?? GetRootNode();
+                _rootNode = _rootNode ?? GetRootNode(_client);
                 return _rootNode;
             }
             set
@@ -42,22 +42,22 @@ namespace BL
             }
         }
 
-        protected Node<PO.Root> GetRootNode()
+        protected static Node<PO.Root> GetRootNode(GraphClient client)
         {
-            var node = _client.ExecuteGetCypherResults<Node<PO.Root>>(
+            var node = client.ExecuteGetCypherResults<Node<PO.Root>>(
                 new CypherQuery(RootNodeQuery
                 , null, CypherResultMode.Set))
             .SingleOrDefault();
             return node;
         }
 
-        protected Node<PO.Workers> GetWorkersRootNode()
+        protected static Node<PO.Workers> GetWorkersRootNode(GraphClient client, Node<PO.Root> rootNode)
         {
             //var rootNode = GetRootNode(client);
             //var query = new CypherQuery("start R=node({p0}) match R-[:RELATED_TO]->N where N.__Type=\"Workers\" return N;", new Dictionary<string, object>() { { "p0", rootNode.Reference.Id } }, CypherResultMode.Set); 
 
-            var query = new CypherQuery("start R=node({p0}) match R-[:RELATED_TO]->WR where WR.Name='Workers' return WR;", new Dictionary<string, object>() { { "p0", _rootNode.Reference.Id } }, CypherResultMode.Set);
-            var node = Client.ExecuteGetCypherResults<Node<PO.Workers>>(
+            var query = new CypherQuery("start R=node({p0}) match R-[:RELATED_TO]->WR where WR.Name='Workers' return WR;", new Dictionary<string, object>() { { "p0", rootNode.Reference.Id } }, CypherResultMode.Set);
+            var node = client.ExecuteGetCypherResults<Node<PO.Workers>>(
                 query
                 );
             return node.SingleOrDefault();

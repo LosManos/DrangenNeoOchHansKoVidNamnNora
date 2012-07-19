@@ -136,6 +136,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\ChunkController.cs" />
+    <Compile Include="Models\ChunkModel.cs" />
+    <Compile Include="Models\ChunksModel.cs" />
     <Compile Include="Models\WorkerModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -237,6 +240,7 @@
     <Content Include="Views\Worker\Edit.cshtml" />
     <Content Include="Views\Worker\Details.cshtml" />
     <Content Include="Views\Worker\Index.cshtml" />
+    <Content Include="Views\Chunk\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

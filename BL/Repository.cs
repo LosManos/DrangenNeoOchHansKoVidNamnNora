@@ -17,15 +17,15 @@ namespace BL
         {
             Connect();
 
-            RootNode = GetRootNode() ?? AddRootNode();
+            RootNode = GetRootNode(Client) ?? AddRootNode(Client);
 
-            var workersNode = GetWorkersRootNode() ?? AddWorkersRootNode();
+            var workersNode = GetWorkersRootNode(Client,RootNode) ?? AddWorkersRootNode(Client, RootNode);
 
         }
 
-        private Node<PO.Root> AddRootNode()
+        private static Node<PO.Root> AddRootNode( GraphClient client)
         {
-            var nodeRef = Client.Create(PO.Root.Create(), null,
+            var nodeRef = client.Create(PO.Root.Create(), null,
                 new[]{
                     new IndexEntry{
                         Name=NameIndexName, 
@@ -35,18 +35,18 @@ namespace BL
                     }
                 });
 
-            var ret = Client.Get<PO.Root>(nodeRef.Id);
+            var ret = client.Get<PO.Root>(nodeRef.Id);
 
-            Client.Update<PO.Root>(ret.Reference, node => { node.SetID(ret.Reference.Id); });
+            client.Update<PO.Root>(ret.Reference, node => { node.SetID(ret.Reference.Id); });
 
-            ret = Client.Get<PO.Root>(nodeRef.Id);
+            ret = client.Get<PO.Root>(nodeRef.Id);
 
             return ret;
         }
 
-        private Node<PO.Workers> AddWorkersRootNode()
+        private static Node<PO.Workers> AddWorkersRootNode(GraphClient client, Node<PO.Root> rootNode)
         {
-            var nodeRef = Client.Create(PO.Workers.Create("Workers"), null,
+            var nodeRef = client.Create(PO.Workers.Create("Workers"), null,
                 new[]{
                     new IndexEntry{
                         Name=NameIndexName, 
@@ -56,17 +56,17 @@ namespace BL
                     }
                 });
 
-            Client.CreateRelationship<PO.Root, Relationships.RelatedToRelationship>(RootNode.Reference, new Relationships.RelatedToRelationship(nodeRef));
+            client.CreateRelationship<PO.Root, Relationships.RelatedToRelationship>(rootNode.Reference, new Relationships.RelatedToRelationship(nodeRef));
 
-            var ret = Client.Get<PO.Workers>(nodeRef.Id);
+            var ret = client.Get<PO.Workers>(nodeRef.Id);
 
-            Client.Update<PO.Workers>(ret.Reference, node => { node.SetID(ret.Reference.Id); });
+            client.Update<PO.Workers>(ret.Reference, node => { node.SetID(ret.Reference.Id); });
 
-            ret = Client.Get<PO.Workers>(nodeRef.Id);
+            ret = client.Get<PO.Workers>(nodeRef.Id);
 
             Debug.Assert(ret.Reference.Id == ret.Data.ID);
             Debug.Assert(ret.Reference.Id == nodeRef.Id);
-            Debug.Assert(ret.Reference.Id == GetWorkersRootNode().Reference.Id);
+            Debug.Assert(ret.Reference.Id == GetWorkersRootNode(client, rootNode).Reference.Id);
 
             return ret;
         }

@@ -6,10 +6,15 @@
 
 <h2>Workers</h2>
 
-    <ol>
+<p>
+    @Html.ActionLink("Add new worker", "Edit", new { })
+</p>
+
+    <ul>
     @foreach( var worker in Model.WorkerList.OrderBy( w => w.Name ) ){
         <li>
             @Html.ActionLink(worker.Name, "Details", "Worker", new { ID = worker.ID }, null)
+            @Html.ActionLink("Edit chunks", "Index", "Chunk")
         </li>
     }
-    </ol>
+    </ul>
