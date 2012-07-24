@@ -39,3 +39,4 @@ C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Web\bin\Neo4jClient.pdb
 C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Web\obj\Debug\Web.csprojResolveAssemblyReference.cache
 C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Web\obj\Debug\Web.dll
 C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Web\obj\Debug\Web.pdb
+C:\DATA\PROJECTS\DrangenNeoOchHansKoVidNamnNora\Web\bin\Glimpse.Core.dll

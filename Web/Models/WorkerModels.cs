@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using System.Web.Security;
+//using System.Web.Security;
 
 namespace Web.Models
 {
@@ -26,30 +26,6 @@ namespace Web.Models
         //[Display(Name = "Confirm password")]
         //[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         //public string ConfirmPassword { get; set; }
-    }
-
-    public class WorkerModel
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-
-        internal static WorkerModel Create(int id, string name)
-        {
-            var ret = new WorkerModel();
-            ret.Set(id, name);
-            return ret;
-        }
-
-        private void Set(int id, string name)
-        {
-            this.ID = id;
-            this.Name = name;
-        }
-
-        internal void Set(BL.DTO.Worker worker)
-        {
-            Set(worker.ID, worker.Name);
-        }
     }
 
 }

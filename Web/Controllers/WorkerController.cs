@@ -8,9 +8,6 @@ namespace Web.Controllers
 {
     public class WorkerController : Controller
     {
-        //
-        // GET: /Worker/
-
         public ActionResult Index()
         {
             ViewBag.Message = "Workers work.";

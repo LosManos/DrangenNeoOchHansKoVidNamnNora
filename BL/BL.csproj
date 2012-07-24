@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="Neo4jClient, Version=1.0.0.394, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Neo4jClient.1.0.0.394\lib\Neo4jClient.dll</HintPath>
+      <HintPath>..\..\Neo4jClient\Neo4jClient\bin\Debug\Neo4jClient.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -50,7 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chunk.cs" />
+    <Compile Include="DTO\Chunk.cs" />
+    <Compile Include="Relationships\HasWorkedRelationship.cs" />
     <Compile Include="ObjectBase.cs" />
+    <Compile Include="PO\Chunk.cs" />
     <Compile Include="Relationships\HasItemRelationship.cs" />
     <Compile Include="DTO\Worker.cs" />
     <Compile Include="PO\Workers.cs" />

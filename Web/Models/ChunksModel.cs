@@ -7,13 +7,21 @@ namespace Web.Models
 {
     public class ChunksModel
     {
-        public IList<ChunkModel> Items { get; set; }
+        public IList<ChunkModel> Chunks { get; set; }
+        public int WorkerID { get; set; }
         public string WorkerName { get; set; }
 
-        public void Set(string workerName, IList<ChunkModel> items)
+        public static ChunksModel Create(int workerID, string workerName, IList<ChunkModel> chunks)
         {
+            return new ChunksModel().Set(workerID, workerName, chunks);
+        }
+
+        public ChunksModel Set(int workerID, string workerName, IList<ChunkModel> chunks)
+        {
+            this.WorkerID = workerID;
             this.WorkerName = workerName;
-            this.Items = items;
+            this.Chunks = chunks;
+            return this;
         }
     }
 }

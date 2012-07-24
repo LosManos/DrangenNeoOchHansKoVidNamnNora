@@ -5,8 +5,12 @@
         <title>@ViewBag.Title - My ASP.NET MVC Application</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
-        @Styles.Render("~/Content/themes/base/css", "~/Content/css")
+@*        @Styles.Render("~/Content/themes/base/css", "~/Content/css")*@
+        @Styles.Render("~/Content/themes/smoothness/jquery-ui-1.8.21.custom.css", "~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryui")   @*http://trentrichardson.com/examples/timepicker/*@
+        @Scripts.Render("~/bundles/date")
     </head>
     <body>
         <header>
@@ -49,7 +53,7 @@
             </div>
         </footer>
 
-        @Scripts.Render("~/bundles/jquery")
+        @*@Scripts.Render("~/bundles/jquery")*@
         @RenderSection("scripts", required: false)
     </body>
 </html>

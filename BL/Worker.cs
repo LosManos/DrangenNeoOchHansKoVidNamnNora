@@ -63,20 +63,21 @@ namespace BL
 
         private static Node<PO.Worker> AddWorker(string name, GraphClient Client, Node<PO.Workers>WorkersRootNode)
         {
-            var workerNodeRef = Client.Create(PO.Worker.Create(name), null,
-                 new[]
+            var workerNodeRef = Client.Create(
+                PO.Worker.Create(name), 
+                null,
+                new[]
                 {
                     new IndexEntry
                     {
                         Name = "my_index",
                         KeyValues = new[]
                         {
-                            new KeyValuePair<string, object>("key", "value"),
-                            new KeyValuePair<string, object>("key2", ""),
-                            new KeyValuePair<string, object>("key3", "value3")
+                            /* new KeyValuePair<string, object>("key", "value"), new KeyValuePair<string, object>("key2", ""), */ new KeyValuePair<string, object>("key3", "value3")
                         }
                     }
-                });
+                }
+            );
 
             Client.Update<PO.Worker>(workerNodeRef, node => { node.SetID(workerNodeRef.Id); });
 
@@ -98,7 +99,7 @@ namespace BL
             client.Delete(worker.Reference, DeleteMode.NodeAndRelationships);
         }
 
-        private static Node<PO.Worker> Get(int id, GraphClient client)
+        internal static Node<PO.Worker> Get(int id, GraphClient client)
         {
             var worker = client.Get<PO.Worker>(id);
             return worker;
