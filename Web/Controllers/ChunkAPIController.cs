@@ -32,13 +32,13 @@ namespace Web.Controllers
         }
 
         // POST api/chunkapi
-        public int Post(Models.ChunkModel value)
+        public Models.ChunkModel Post(Models.ChunkModel value)
         {
             Trace.Write(value.ID);
 
             var bl = new BL.Chunk();
             var newChunk = bl.Add(value.Start, value.Stop, value.Duration, value.OwningWorkerID);
-            return newChunk.ID;
+            return Models.ChunkModel.Create(newChunk,value.OwningWorkerID);
         }
 
         // PUT api/chunkapi/5

@@ -21,11 +21,11 @@ namespace Web
             );
 
             ////  http://localhost/DrangenNeoOchHansKoVidNamnNora/Worker/61/Chunk
-            //routes.MapRoute(
-            //    name: "EditChunksForWorker",
-            //    url: "Worker/{id}/Chunk/{action}",
-            //    defaults: new { controller="Chunk", action = "Index", id = 0 }
-            //    );
+            routes.MapRoute(
+                name: "EditChunksForWorker",
+                url: "Worker/{id}/Chunk/{action}",
+                defaults: new { controller = "Chunk", action = "Index", id = 0 }
+                );
 
             routes.MapRoute(
                 name: "Default",

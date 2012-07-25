@@ -19,7 +19,7 @@ namespace BL.DTO
 
         internal static Chunk Create(PO.Chunk chunk)
         {
-            return new Chunk().Set(chunk.ID, chunk.Start, chunk.Stop, chunk.Duration);
+            return new Chunk().Set(chunk.ID, chunk.StartDateTimeOffset, chunk.StopDateTimeOffset, chunk.DurationTimeSpan);
         }
 
         private Chunk Set(int id, DateTimeOffset start, DateTimeOffset stop, TimeSpan duration)

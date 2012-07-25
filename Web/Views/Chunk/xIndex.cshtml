@@ -1,12 +1,10 @@
 ﻿@model Web.Models.ChunksModel
 
 @{
-    ViewBag.Title = "bananabananabanana";
+    ViewBag.Title = "Index";
 }
 
 <h2>Chunks</h2>
-
-<input type="hidden" id="WorkerID" value="@Model.WorkerID" />
 
 <div>
     <label for="newChunkStartTime" accesskey="S">Start</label>
@@ -27,6 +25,7 @@
     Chunks:
 </div>
 
+<div id="asdf"></div>
 <div>
     <ol id="ChunkList">
     </ol>
@@ -37,6 +36,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         loadChunks();
+
+        $("#asdf").text(Model.toString());
 
         $('#newChunkStartDate').datepicker();
         $('#newChunkStartDate').datepicker("option", "dateFormat", "yy-mm-dd");
@@ -58,8 +59,7 @@
             postAddChunk(
                 new Date($("#newChunkStartDate").val() + " " + $("#newChunkStartTime").val()), 
                 new Date($("#newChunkStopDate").val() + " " + $("#newChunkStopTime").val()), 
-                $("#newChunkDuration").val(),
-                $("#WorkerID").val()
+                $("#newChunkDuration").val()
             );
         });
     });
@@ -67,21 +67,19 @@
     function addChunks(chunks) {
         for (var i = 0 ; i < chunks.Chunks.length ; ++i) {
             var chunk = chunks.Chunks[i];
-            addChunk(chunk);
+            $("#ChunkList").append(newChunkItemString(chunk));
         }
     }
 
     function addChunk(chunk) {
-        $("#ChunkList").append(newChunkItemString(chunk));
+        alert("TBA");
+        alert(chunk);
     }
 
     function formatFromToDuration(fromDateTime, toDateTime, duration) {
-        return "" +
-            fromDateTime.toYYYYMMDD() +
-            " " +
-            fromDateTime.toString("HH:mm") +
+        return fromDateTime.toYYYYMMDD() +
             " - " +
-            toDateTime.toString("HH:mm") +
+            toDateTime.toYYYYMMDD() +
             " (" +
             duration.substr( 0, 5 ) +
             ")";

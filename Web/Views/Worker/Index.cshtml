@@ -14,7 +14,7 @@
     @foreach( var worker in Model.WorkerList.OrderBy( w => w.Name ) ){
         <li>
             @Html.ActionLink(worker.Name, "Details", "Worker", new { ID = worker.ID }, null)
-            @Html.ActionLink("Edit chunks", "Index", "Chunk")
+            @Html.ActionLink("Edit chunks", string.Format( "/{0}/Chunk", worker.ID), "Worker")
         </li>
     }
     </ul>

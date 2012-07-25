@@ -182,10 +182,6 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
-    <Content Include="Scripts\jquery-ui-1.8.11.js" />
-    <Content Include="Scripts\jquery-ui-1.8.11.min.js">
-      <DependentUpon>jquery-ui-1.8.11.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\jquery-ui-1.8.21.custom.js" />
     <Content Include="Scripts\jquery-ui-1.8.21.custom.min.js">
       <DependentUpon>jquery-ui-1.8.21.custom.js</DependentUpon>
@@ -249,8 +245,8 @@
     <Content Include="Views\Worker\Edit.cshtml" />
     <Content Include="Views\Worker\Details.cshtml" />
     <Content Include="Views\Worker\Index.cshtml" />
+    <Content Include="Views\Chunk\xIndex.cshtml" />
     <Content Include="Views\Chunk\Index.cshtml" />
-    <Content Include="Views\Chunk\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

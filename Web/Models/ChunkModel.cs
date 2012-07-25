@@ -8,19 +8,24 @@ namespace Web.Models
     public class ChunkModel
     {
         public int ID { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime Stop { get; set; }
+        public DateTimeOffset Start { get; set; }
+        public DateTimeOffset Stop { get; set; }
         public TimeSpan Duration { get; set; }
         public int OwningWorkerID { get; set; }
 
-        public static ChunkModel Create(int id, DateTime start, DateTime? stop, TimeSpan? duration, int owningWorkerID)
+        public static ChunkModel Create(int id, DateTimeOffset start, DateTimeOffset? stop, TimeSpan? duration, int owningWorkerID)
         {
             var ret = new ChunkModel();
             ret.Set(id, start, stop, duration, owningWorkerID);
             return ret;
         }
 
-        public void Set(int id, DateTime start, DateTime? stop, TimeSpan? duration, int owningWorkerID)
+        internal static ChunkModel Create(BL.DTO.Chunk chunk, int owningWorkerID)
+        {
+            return Create(chunk.ID, chunk.Start, chunk.Stop, chunk.Duration, owningWorkerID);
+        }
+
+        public void Set(int id, DateTimeOffset start, DateTimeOffset? stop, TimeSpan? duration, int owningWorkerID)
         {
             this.ID = id;
             this.Start = start;
@@ -36,5 +41,6 @@ namespace Web.Models
             this.Duration = duration.Value;
             this.OwningWorkerID = owningWorkerID;
         }
+
     }
 }
