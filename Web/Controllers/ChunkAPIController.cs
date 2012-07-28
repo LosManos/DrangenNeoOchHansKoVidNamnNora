@@ -26,9 +26,20 @@ namespace Web.Controllers
         }
 
         // GET api/chunkapi/5
-        public string Get(int id)
+        public Models.ChunksModel Get(int workerID)
         {
-            return "value";
+            var workerBL = new BL.Worker();
+            var worker = workerBL.Get(workerID);
+            Debug.Assert( worker.ID == workerID );
+
+            var chunkBL = new BL.Chunk();
+            var chunks = chunkBL.GetByWorker(worker);
+
+            var ret = Models.ChunksModel.Create(worker.ID, worker.Name,
+                chunks.Select( c => Models.ChunkModel.Create( c, worker.ID )).ToList()
+                );
+
+            return ret;
         }
 
         // POST api/chunkapi
@@ -49,6 +60,9 @@ namespace Web.Controllers
         // DELETE api/chunkapi/5
         public void Delete(int id)
         {
+            var chunkBL = new BL.Chunk();
+            var chunk = chunkBL.Get(id);
+            chunkBL.Delete(chunk);
         }
     }
 }

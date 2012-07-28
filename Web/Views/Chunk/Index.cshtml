@@ -27,78 +27,171 @@
     Chunks:
 </div>
 
+<hr />
+The name is <span data-bind="text:workerName"></span> debug: <span data-bind="text:toDebugString" ></span>
+Length is <span data-bind="text:chunks().length"></span>
+<hr />
+
 <div>
-    <ol id="ChunkList">
+    <ol id="ChunkList" data-bind="template: { name: 'person-template', foreach: chunks() }">
     </ol>
 </div>
 
-@*<input type="text" name="date" id="date" />
-*@
+<script type="text/html" id="person-template">
+    <li>
+        <div>
+            <span data-bind="text:id" />
+            <span data-bind="text:startYYYYMMDD()" />:<span data-bind="text:startHHMM()" /> <span data-bind="text:stopHHMM()" /> (<span data-bind="text:duration" />)
+            <a href="#" class="editChunkAction">edit(TBA)</a>
+            <a href="#" class="deleteChunkAction" data-bind="attr: { 'chunkId': id }">delete(TBA)</a>
+        </div> 
+    </li>
+</script>
+
 <script type="text/javascript">
+    function ChunkModel() {
+        self = this;
+        self.id = null; //  Integer.
+        self.start = null;  //  Date.
+        self.stop = null;   //  Date.
+        self.duration = null;   //  String.
+
+        self.startYYYYMMDD = function () { return self.start.toYYYYMMDD(); };
+        self.startHHMM = function () { return self.start.toHHMM(); };
+        self.stopYYYYMMDD = function () { return self.stop.toYYYYMMDD(); };
+        self.stopHHMM = function () { return self.stop.toHHMM(); };
+
+        self.set = function (id, start, stop, duration) {
+            self.id = id;
+            self.start = new Date( start );
+            self.stop = new Date( stop );
+            self.duration = duration;
+            return self;
+        };
+        self.toDebugString = function () {
+            return "{start:" + self.start + ",stop:" + self.stop + ",duration:" + self.duration + "}";
+        };
+    }
+    function ViewModel() {
+        self = this;
+        self.workerId = ko.observable(0);
+        self.workerName = ko.observable('N/A');
+
+        self.set = function (workerId, workerName) {
+            self.workerId = workerId;
+            self.workerName = workerName;
+            return self;
+        };
+        self.toDebugString = ko.computed(function () {
+            return "{workerID:" + this.workerId() + ",workerName:" + self.workerName() + "}" ;
+        }, this);
+
+        self.chunks = ko.observableArray();
+    };
+
+    var viewModel = new ViewModel();
+    ko.applyBindings(viewModel);
+</script>
+
+<script type="text/javascript">
+
     $(document).ready(function () {
-        loadChunks();
+
+        setStartStopDuration();
+
+        getLoadChunks($("#WorkerID").val(), addChunks);
+
+        $(".deleteChunkAction").live("click", deleteChunk_click);
+    });
+
+    function addChunk(chunk) {
+        viewModel.chunks.push(new ChunkModel().set(chunk.ID, chunk.Start, chunk.Stop, chunk.Duration));
+    }
+
+    function addChunks(modelFromServer) {
+        modelFromServer.Chunks.sortBy("Start");
+        for (var i = 0 ; i < modelFromServer.Chunks.length ; ++i) {
+            var chunk = modelFromServer.Chunks[i];
+            addChunk(chunk);
+        }
+    }
+
+    function deleteChunk_click() {
+        ajaxDeleteChunk( this.attributes["chunkId"].value, deletedChunk);
+        return false;
+    }
+
+    function deletedChunk( chunkId ){
+        for( var i=0 ; i <viewModel.chunks().length ; i++ ){
+            if( viewModel.chunks()[i].id == chunkId ){
+                viewModel.chunks.remove( viewModel.chunks()[i] );
+                return;
+            }
+        }
+        alert( "Error: chunk " + chunkId + " was not found in viewmodel." );
+    }
+
+    function setStartStopDuration() {
+        var start = new Date();
+        var stop = start.clone().addMinutes(30);
 
         $('#newChunkStartDate').datepicker();
         $('#newChunkStartDate').datepicker("option", "dateFormat", "yy-mm-dd");
-        $('#newChunkStartDate').val( Date.now().toYYYYMMDD() );
+        $('#newChunkStartDate').val(start.toYYYYMMDD());
 
         $("#newChunkStartTime").timepicker({ ampm: false, hourMin: 0, hourMax: 24 });   //  http://trentrichardson.com/examples/timepicker/
-        $("#newChunkStartTime").val("8:00");
+        $("#newChunkStartTime").val(start.toHHMM());
 
         $('#newChunkStopDate').datepicker();
         $('#newChunkStopDate').datepicker("option", "dateFormat", "yy-mm-dd");
-        $('#newChunkStopDate').val(Date.now().toYYYYMMDD());
+        $('#newChunkStopDate').val(stop.toYYYYMMDD());
 
         $("#newChunkStopTime").timepicker({ ampm: false, hourMin: 0, hourMax: 24 });
-        $("#newChunkStopTime").val("8:30");
+        $("#newChunkStopTime").val(stop.toHHMM());
 
         $("#newChunkDuration").timepicker({ ampm: false, hourMin: 0, hourMax: 24 });
 
         $("#addChunk").click(function () {
             postAddChunk(
-                new Date($("#newChunkStartDate").val() + " " + $("#newChunkStartTime").val()), 
-                new Date($("#newChunkStopDate").val() + " " + $("#newChunkStopTime").val()), 
+                new Date($("#newChunkStartDate").val() + " " + $("#newChunkStartTime").val()),
+                new Date($("#newChunkStopDate").val() + " " + $("#newChunkStopTime").val()),
                 $("#newChunkDuration").val(),
-                $("#WorkerID").val()
+                $("#WorkerID").val(),
+                addChunk
             );
         });
-    });
+    }
 
-    function addChunks(chunks) {
-        for (var i = 0 ; i < chunks.Chunks.length ; ++i) {
-            var chunk = chunks.Chunks[i];
-            addChunk(chunk);
+    /// Helper methods.
+
+    //  http://stackoverflow.com/questions/1129216/sorting-objects-in-an-array-by-a-field-value-in-javascript
+    function dynamicSort(property) {
+        return function (a, b) {
+            return (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
         }
     }
-
-    function addChunk(chunk) {
-        $("#ChunkList").append(newChunkItemString(chunk));
-    }
-
-    function formatFromToDuration(fromDateTime, toDateTime, duration) {
-        return "" +
-            fromDateTime.toYYYYMMDD() +
-            " " +
-            fromDateTime.toString("HH:mm") +
-            " - " +
-            toDateTime.toString("HH:mm") +
-            " (" +
-            duration.substr( 0, 5 ) +
-            ")";
+    Array.prototype.sortBy = function (property) {
+        return this.sort(dynamicSort(property))
     }
 
     Date.prototype.toYYYYMMDD = function () {
         return this.toString("yyyy-MM-dd");
     }
 
-    function loadChunks() {
+    Date.prototype.toHHMM = function () {
+        return this.toString("HH:mm");
+    }
+
+    /// Ajax calls.
+
+    function ajaxDeleteChunk(chunkId, successFunc) {
         $.ajax({
-            url: "/DrangenNeoOchHansKoVidNamnNora/api/chunkapi",
-            type: "get",
-            data: 1,
+            url: "/DrangenNeoOchHansKoVidNamnNora/api/chunkapi/" + chunkId,
+            type: "DELETE", 
+            data: JSON.stringify({"id": chunkId }), //  Not used.
             contentType: "application/json;charset=utf-8",
             success: function (response, textStatus, jqXHR) {
-                addChunks(response);
+                successFunc(chunkId);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert('error ajax call');
@@ -110,18 +203,33 @@
         });
     }
 
-    function newChunkItemString(chunk) {
-        return "<li>" + formatFromToDuration(new Date(chunk.Start), new Date(chunk.Stop), chunk.Duration) + "</li>";
+    function getLoadChunks( workerID, successFunc ) {
+        $.ajax({
+            url: "/DrangenNeoOchHansKoVidNamnNora/api/chunkapi",
+            type: "get",
+            data: { "workerID": workerID }, //  Used how?
+            contentType: "application/json;charset=utf-8",
+            success: function (response, textStatus, jqXHR) {
+                successFunc(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('error ajax call');
+                alert(errorThrown);
+            },
+            complete: function () {
+                //alert('complete ajax call');
+            }
+        });
     }
 
-    function postAddChunk(startDateTime, stopDateTime, duration, owningWorkerID) {
+    function postAddChunk(startDateTime, stopDateTime, duration, owningWorkerID, successFunc) {
         $.ajax({
             url: "/DrangenNeoOchHansKoVidNamnNora/api/chunkapi",
             type: "post",
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({ Start: startDateTime, Stop: stopDateTime, Duration: duration, OwningWorkerID: owningWorkerID }),
             success: function (response, textStatus, jqXHR) {
-                addChunk(response);
+                successFunc(response);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert('error ajax call');

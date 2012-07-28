@@ -88,6 +88,13 @@ namespace TheConsole
                 exceptionThrown = true;
                 Console.WriteLine( "An exception was thrown since we tried to retrieve a Chunk that was deleted.");
             }
+
+            Console.Write(string.Format("Getting all Chunks for a Worker with id={0}.", worker.ID));
+            var chunks = chunkBL.GetByWorker(worker);
+            foreach (var c in chunks)
+            {
+                Console.WriteLine(string.Format("Chunk:{0} {1}-{2} {3}", c.ID, c.Start, c.Stop, c.Duration));
+            }
             Debug.Assert(exceptionThrown);
         }
     }

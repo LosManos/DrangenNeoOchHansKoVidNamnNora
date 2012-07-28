@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Neo4jClient;
+using Neo4jClient.Cypher;
 
 namespace BL
 {
@@ -42,6 +43,20 @@ namespace BL
             return DTO.Chunk.Create(Get(id, Client).Data);
         }
 
+        public IList<DTO.Chunk> GetByWorker(DTO.Worker worker)
+        {
+            Debug.Assert(null != worker);
+            Debug.Assert(worker.ID >= 1);
+
+            Connect();
+
+            var workerNode = Worker.Get( worker.ID, Client );
+
+            var lst = GetByWorker(workerNode, Client);
+
+            return lst.Select(c => DTO.Chunk.Create(c)).ToList();
+        }
+
         public DTO.Chunk Update(DTO.Chunk chunk)
         {
             Debug.Assert(null != chunk);
@@ -57,7 +72,7 @@ namespace BL
             return DTO.Chunk.Create(updatedChunk.Data);
         }
 
-        private Node<PO.Chunk> Add(DateTimeOffset start, DateTimeOffset stop, TimeSpan duration, Node<PO.Worker> owningWorkerNode, Neo4jClient.GraphClient Client, Neo4jClient.Node<PO.Root> RootNode)
+        internal Node<PO.Chunk> Add(DateTimeOffset start, DateTimeOffset stop, TimeSpan duration, Node<PO.Worker> owningWorkerNode, Neo4jClient.GraphClient Client, Neo4jClient.Node<PO.Root> RootNode)
         {
             var chunkNodeRef = Client.Create(
                 PO.Chunk.Create(start, stop, duration),
@@ -88,18 +103,30 @@ namespace BL
             return ret;
         }
 
-        private static void Delete(DTO.Chunk chunk, GraphClient Client)
+        internal static void Delete(DTO.Chunk chunk, GraphClient Client)
         {
             var node = Get(chunk.ID, Client);
             Client.Delete(node.Reference, DeleteMode.NodeAndRelationships);
         }
 
-        private static Node<PO.Chunk> Get(int id, GraphClient client)
+        internal static Node<PO.Chunk> Get(int id, GraphClient client)
         {
             return client.Get<PO.Chunk>(id);
         }
 
-        private static Node<PO.Chunk> Update(DTO.Chunk chunk, GraphClient client)
+        internal IList<PO.Chunk> GetByWorker(Node<PO.Worker> worker, GraphClient client)
+        {
+            //  start n=node(61) match n-[:HAS_WORKED]->b return b;
+
+            var query = new CypherQuery("start n=node({workerNodeID}) match n-[:HAS_WORKED]->b return b;", new Dictionary<string, object>() { { "workerNodeID", worker.Reference.Id } }, CypherResultMode.Set);
+
+            var chunks = Client.ExecuteGetCypherResults<Node<PO.Chunk>>(query);
+
+            return chunks.Select(n => n.Data).ToList();
+
+        }
+
+        internal static Node<PO.Chunk> Update(DTO.Chunk chunk, GraphClient client)
         {
             Debug.Assert(chunk.ID >= 1);
 

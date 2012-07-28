@@ -245,7 +245,6 @@
     <Content Include="Views\Worker\Edit.cshtml" />
     <Content Include="Views\Worker\Details.cshtml" />
     <Content Include="Views\Worker\Index.cshtml" />
-    <Content Include="Views\Chunk\xIndex.cshtml" />
     <Content Include="Views\Chunk\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

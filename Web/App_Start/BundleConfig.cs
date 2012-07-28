@@ -22,6 +22,8 @@ namespace Web
 
             bundles.Add(new ScriptBundle("~/bundles/date").Include("~/Scripts/date.js"));   //  http://www.datejs.com/2007/11/27/getting-started-with-datejs/
 
+            bundles.Add(new StyleBundle("~/bundles/knockout").Include("~/Scripts/knockout-2.0.0*"));    //  <-added by me
+
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/smoothness/css").Include(
@@ -38,5 +40,6 @@ namespace Web
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
         }
+
     }
 }
