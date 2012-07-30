@@ -26,14 +26,14 @@
 <div>
     Chunks:
 </div>
-
+    
 <hr />
 The name is <span data-bind="text:workerName"></span> debug: <span data-bind="text:toDebugString" ></span>
 Length is <span data-bind="text:chunks().length"></span>
 <hr />
 
 <div>
-    <ol id="ChunkList" data-bind="template: { name: 'person-template', foreach: chunks() }">
+    <ol id="ChunkList" data-bind="template: { name: 'person-template', foreach: chunks(), afterAdd: handleAfterAddChunk, beforeRemove:handleBeforeRemoveChunk }">
     </ol>
 </div>
 
@@ -43,7 +43,7 @@ Length is <span data-bind="text:chunks().length"></span>
             <span data-bind="text:id" />
             <span data-bind="text:startYYYYMMDD()" />:<span data-bind="text:startHHMM()" /> <span data-bind="text:stopHHMM()" /> (<span data-bind="text:duration" />)
             <a href="#" class="editChunkAction">edit(TBA)</a>
-            <a href="#" class="deleteChunkAction" data-bind="attr: { 'chunkId': id }">delete(TBA)</a>
+            <a href="#" class="deleteChunkAction" data-bind="attr: { 'chunkId': id }">delete</a>
         </div> 
     </li>
 </script>
@@ -74,8 +74,10 @@ Length is <span data-bind="text:chunks().length"></span>
     }
     function ViewModel() {
         self = this;
+
         self.workerId = ko.observable(0);
         self.workerName = ko.observable('N/A');
+        self.chunks = ko.observableArray();
 
         self.set = function (workerId, workerName) {
             self.workerId = workerId;
@@ -86,11 +88,20 @@ Length is <span data-bind="text:chunks().length"></span>
             return "{workerID:" + this.workerId() + ",workerName:" + self.workerName() + "}" ;
         }, this);
 
-        self.chunks = ko.observableArray();
+        handleAfterAddChunk = function (domElements, index, addedElement) {
+            $(domElements).hide().slideDown().fadeIn();
+        }
+
+        handleBeforeRemoveChunk = function (elements, data) {
+            $(elements).fadeOut().slideUp();
+        };
+
     };
 
     var viewModel = new ViewModel();
-    ko.applyBindings(viewModel);
+    ko.applyBindings(
+        viewModel
+    );
 </script>
 
 <script type="text/javascript">
@@ -104,15 +115,22 @@ Length is <span data-bind="text:chunks().length"></span>
         $(".deleteChunkAction").live("click", deleteChunk_click);
     });
 
-    function addChunk(chunk) {
+    function pushChunk(chunk) {
         viewModel.chunks.push(new ChunkModel().set(chunk.ID, chunk.Start, chunk.Stop, chunk.Duration));
     }
 
+    function addChunk(chunkDTO) {
+        pushChunk(chunkDTO);
+        viewModel.chunks.sort(function (a, b) {
+            return a.start > b.start;
+        });
+    }
+
     function addChunks(modelFromServer) {
-        modelFromServer.Chunks.sortBy("Start");
+        modelFromServer.Chunks.sortByProperty("Start");
         for (var i = 0 ; i < modelFromServer.Chunks.length ; ++i) {
             var chunk = modelFromServer.Chunks[i];
-            addChunk(chunk);
+            pushChunk(chunk);
         }
     }
 
@@ -170,7 +188,7 @@ Length is <span data-bind="text:chunks().length"></span>
             return (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
         }
     }
-    Array.prototype.sortBy = function (property) {
+    Array.prototype.sortByProperty = function (property) {
         return this.sort(dynamicSort(property))
     }
 
